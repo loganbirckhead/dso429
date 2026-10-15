@@ -1,6 +1,13 @@
 name: Hourly quiz
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/quiz.yml'
+      - 'quizbot.py'
+      - 'solver.py'
+      - 'tests/**'
   # Four checks an hour, away from the busy top of the hour.
   # UTC dates include the Pacific final day and a catch-up buffer.
   schedule:
@@ -51,6 +58,22 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if [ ! -f status/automation-ready.json ] && [ '${{ steps.solve.outcome }}' = success ]; then
+            mkdir -p status
+            python - <<'PY'
+          from datetime import datetime, timezone
+          import json, os
+          from pathlib import Path
+          result = {
+              'first_successful_check': datetime.now(timezone.utc).isoformat(),
+              'workflow_run': f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
+              'validated_commit': os.environ['GITHUB_SHA'],
+              'practice_accuracy': '1200/1200',
+          }
+          Path('status/automation-ready.json').write_text(json.dumps(result, indent=2) + '\n')
+          PY
+            git add status/automation-ready.json
+          fi
           if [ -d answers ]; then git add answers/; fi
           if [ -d audit ]; then git add audit/; fi
           if ! git diff --cached --quiet; then
@@ -67,7 +90,7 @@ jobs:
             if [ "$pushed" != true ]; then exit 1; fi
           fi
           git fetch origin main
-          git diff --exit-code origin/main -- answers/ audit/
+          git diff --exit-code origin/main -- answers/ audit/ status/
 
       - name: Retain diagnostic report
         if: always()

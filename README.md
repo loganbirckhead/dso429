@@ -54,6 +54,7 @@ python3 quizbot.py run --questions tests/fixtures/practice_questions.csv --root 
 - For a correction within the window: independently verify the result, edit the answer and corresponding audit, validate, then push to `main` before the window closes. Do not delete/recreate a late submission expecting a new grading attempt.
 - GitHub schedules can be delayed or dropped. Check the Actions page at least morning and evening, and manually trigger a run if checks stop. The schedule and backlog recovery provide retries but do not guarantee delivery.
 - No laptop process needs to remain running for GitHub Actions.
+- Source/workflow changes on `main` also trigger a check. The first successful cloud run publishes `status/automation-ready.json` once, proving the workflow can push with its own token.
 - The schedule covers October 15–23 UTC; live fetching stops October 23, 2026 at 10:00 UTC. Disable the workflow once the assignment is complete to avoid its annual cron recurrence.
 
 ## Schedule and submissions (Pacific time)
