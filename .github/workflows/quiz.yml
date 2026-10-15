@@ -1,0 +1,85 @@
+name: Hourly quiz
+
+on:
+  # Four checks an hour, away from the busy top of the hour.
+  # UTC dates include the Pacific final day and a catch-up buffer.
+  schedule:
+    - cron: '7,22,37,52 * 15-23 10 *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: quiz-submissions
+  cancel-in-progress: false
+
+jobs:
+  solve-and-submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run regression tests and practice benchmarks
+        run: python -m unittest discover -s tests -v
+
+      - name: Fetch and solve all pending rounds
+        id: solve
+        continue-on-error: true
+        run: python quizbot.py run
+
+      # Valid rounds must still be pushed if another round could not be solved.
+      - name: Validate answer files
+        id: validate
+        if: always() && steps.solve.outcome != 'skipped'
+        run: python quizbot.py validate
+
+      - name: Commit and push answers
+        if: always() && steps.validate.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if [ -d answers ]; then git add answers/; fi
+          if [ -d audit ]; then git add audit/; fi
+          if ! git diff --cached --quiet; then
+            git commit -m 'Submit available quiz rounds'
+            pushed=false
+            for attempt in 1 2 3; do
+              git pull --rebase origin main
+              if git push origin HEAD:main; then
+                pushed=true
+                break
+              fi
+              sleep 3
+            done
+            if [ "$pushed" != true ]; then exit 1; fi
+          fi
+          git fetch origin main
+          git diff --exit-code origin/main -- answers/ audit/
+
+      - name: Retain diagnostic report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quiz-check-${{ github.run_id }}
+          path: reports/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Mark run failed if rounds need attention
+        if: always() && steps.solve.outcome == 'failure'
+        run: |
+          echo 'Some rounds need attention. See the solver output and diagnostic report.'
+          exit 1

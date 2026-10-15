@@ -1,0 +1,158 @@
+{
+  "round_id": 19,
+  "released_at": "2026-10-15T21:00:00+00:00",
+  "solved_at": "2026-10-15T20:24:05.094314+00:00",
+  "source_sha256": "2133f82188f6e93fc0c8d532d6df440d85178f7b952a00f6b7dfc73b51276483",
+  "questions": {
+    "q1": {
+      "kind": "percentage_change",
+      "computed_value": "-12.54054054054054054054054054054054054054",
+      "formula": "(1618.00 - 1850.00) / 1850.00 * 100",
+      "answer": "C"
+    },
+    "q2": {
+      "kind": "probability",
+      "computed_value": "34.21052631578947368421052631578947368421",
+      "formula": "13 / (13 + 12 + 13) * 100",
+      "answer": "A"
+    },
+    "q3": {
+      "kind": "break_even",
+      "computed_value": "282.3529411764705882352941176470588235294",
+      "formula": "24000.00 / (199.00 - 114.00); nearest unit as requested",
+      "answer": "C"
+    },
+    "q4": {
+      "kind": "revenue",
+      "computed_value": "3626.08",
+      "formula": "262 * 13.84",
+      "answer": "D"
+    },
+    "q5": {
+      "kind": "compound_interest",
+      "computed_value": "70448.771112020450650000",
+      "formula": "26500.00 * (1 + 13/100) ** 8",
+      "answer": "B"
+    },
+    "q6": {
+      "kind": "break_even",
+      "computed_value": "512.9310344827586206896551724137931034483",
+      "formula": "59500.00 / (193.00 - 77.00); nearest unit as requested",
+      "answer": "D"
+    },
+    "q7": {
+      "kind": "discount",
+      "computed_value": "308.568",
+      "formula": "385.71 * (1 - 20/100)",
+      "answer": "D"
+    },
+    "q8": {
+      "kind": "currency_conversion",
+      "computed_value": "5400.358656",
+      "formula": "2858.24 * 1.8894",
+      "answer": "C"
+    },
+    "q9": {
+      "kind": "percentage_change",
+      "computed_value": "-22.94736842105263157894736842105263157895",
+      "formula": "(732.00 - 950.00) / 950.00 * 100",
+      "answer": "D"
+    },
+    "q10": {
+      "kind": "discount",
+      "computed_value": "318.120",
+      "formula": "397.65 * (1 - 20/100)",
+      "answer": "B"
+    },
+    "q11": {
+      "kind": "currency_conversion",
+      "computed_value": "5398.244489",
+      "formula": "8331.91 * 0.6479",
+      "answer": "D"
+    },
+    "q12": {
+      "kind": "weighted_average",
+      "computed_value": "23.14285714285714285714285714285714285714",
+      "formula": "(152 * 21.00 + 30 * 34.00) / (152 + 30)",
+      "answer": "D"
+    },
+    "q13": {
+      "kind": "percentage_change",
+      "computed_value": "12.31818181818181818181818181818181818182",
+      "formula": "(2471.00 - 2200.00) / 2200.00 * 100",
+      "answer": "A"
+    },
+    "q14": {
+      "kind": "discount",
+      "computed_value": "404.556",
+      "formula": "674.26 * (1 - 40/100)",
+      "answer": "C"
+    },
+    "q15": {
+      "kind": "gross_margin",
+      "computed_value": "52.80569470404984423676012461059190031153",
+      "formula": "(80250.00 - 37873.43) / 80250.00 * 100",
+      "answer": "D"
+    },
+    "q16": {
+      "kind": "gross_margin",
+      "computed_value": "16.04703797468354430379746835443037974684",
+      "formula": "(19750.00 - 16580.71) / 19750.00 * 100",
+      "answer": "B"
+    },
+    "q17": {
+      "kind": "compound_interest",
+      "computed_value": "25289.00000",
+      "formula": "19000.00 * (1 + 10/100) ** 3",
+      "answer": "A"
+    },
+    "q18": {
+      "kind": "percentage_change",
+      "computed_value": "41.87096774193548387096774193548387096774",
+      "formula": "(2199.00 - 1550.00) / 1550.00 * 100",
+      "answer": "A"
+    },
+    "q19": {
+      "kind": "weighted_average",
+      "computed_value": "54.98058252427184466019417475728155339806",
+      "formula": "(61 * 35.00 + 42 * 84.00) / (61 + 42)",
+      "answer": "A"
+    },
+    "q20": {
+      "kind": "discount",
+      "computed_value": "459.648",
+      "formula": "510.72 * (1 - 10/100)",
+      "answer": "D"
+    },
+    "q21": {
+      "kind": "percentage_change",
+      "computed_value": "37.37037037037037037037037037037037037037",
+      "formula": "(3709.00 - 2700.00) / 2700.00 * 100",
+      "answer": "B"
+    },
+    "q22": {
+      "kind": "revenue",
+      "computed_value": "16752.80",
+      "formula": "487 * 34.40",
+      "answer": "B"
+    },
+    "q23": {
+      "kind": "currency_conversion",
+      "computed_value": "8796.787360",
+      "formula": "6102.10 * 1.4416",
+      "answer": "B"
+    },
+    "q24": {
+      "kind": "arithmetic_series",
+      "computed_value": "81",
+      "formula": "67 + 14",
+      "answer": "D"
+    },
+    "q25": {
+      "kind": "compound_interest",
+      "computed_value": "6168.195891200000",
+      "formula": "3500.00 * (1 + 12/100) ** 5",
+      "answer": "A"
+    }
+  }
+}

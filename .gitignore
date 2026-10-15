@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+.env
+.env.*
+reports/
+usage_reports/
+*.transcript.jsonl
+*.json.tmp
