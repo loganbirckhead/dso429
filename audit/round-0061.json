@@ -1,0 +1,158 @@
+{
+  "round_id": 61,
+  "released_at": "2026-10-18T09:01:39+00:00",
+  "solved_at": "2026-10-18T11:01:21.250721+00:00",
+  "source_sha256": "a7a92715731e78be720a0c72182d88291ac6b099663dc03e95f364782b99e533",
+  "questions": {
+    "q1": {
+      "kind": "probability",
+      "computed_value": "13.63636363636363636363636363636363636364",
+      "formula": "3 / (3 + 9 + 10) * 100",
+      "answer": "D"
+    },
+    "q2": {
+      "kind": "arithmetic_series",
+      "computed_value": "78",
+      "formula": "64 + 14",
+      "answer": "A"
+    },
+    "q3": {
+      "kind": "gross_margin",
+      "computed_value": "38.02845771144278606965174129353233830846",
+      "formula": "(50250.00 - 31140.70) / 50250.00 * 100",
+      "answer": "A"
+    },
+    "q4": {
+      "kind": "weighted_average",
+      "computed_value": "69.74007220216606498194945848375451263538",
+      "formula": "(189 * 78.00 + 88 * 52.00) / (189 + 88)",
+      "answer": "A"
+    },
+    "q5": {
+      "kind": "gross_margin",
+      "computed_value": "13.39455900621118012422360248447204968944",
+      "formula": "(80500.00 - 69717.38) / 80500.00 * 100",
+      "answer": "A"
+    },
+    "q6": {
+      "kind": "percentage_change",
+      "computed_value": "-27.41304347826086956521739130434782608696",
+      "formula": "(3339.00 - 4600.00) / 4600.00 * 100",
+      "answer": "D"
+    },
+    "q7": {
+      "kind": "revenue",
+      "computed_value": "74771.43",
+      "formula": "849 * 88.07",
+      "answer": "A"
+    },
+    "q8": {
+      "kind": "ratio_allocation",
+      "computed_value": "4520.00",
+      "formula": "6780.00 * 4 / (4 + 2)",
+      "answer": "C"
+    },
+    "q9": {
+      "kind": "weighted_average",
+      "computed_value": "57.94968553459119496855345911949685534591",
+      "formula": "(62 * 61.00 + 97 * 56.00) / (62 + 97)",
+      "answer": "A"
+    },
+    "q10": {
+      "kind": "weighted_average",
+      "computed_value": "46.45348837209302325581395348837209302326",
+      "formula": "(42 * 85.00 + 130 * 34.00) / (42 + 130)",
+      "answer": "A"
+    },
+    "q11": {
+      "kind": "probability",
+      "computed_value": "38.29787234042553191489361702127659574468",
+      "formula": "18 / (18 + 17 + 12) * 100",
+      "answer": "B"
+    },
+    "q12": {
+      "kind": "revenue",
+      "computed_value": "29656.72",
+      "formula": "436 * 68.02",
+      "answer": "C"
+    },
+    "q13": {
+      "kind": "revenue",
+      "computed_value": "33030.76",
+      "formula": "644 * 51.29",
+      "answer": "D"
+    },
+    "q14": {
+      "kind": "weighted_average",
+      "computed_value": "70.88888888888888888888888888888888888889",
+      "formula": "(60 * 69.00 + 102 * 72.00) / (60 + 102)",
+      "answer": "B"
+    },
+    "q15": {
+      "kind": "probability",
+      "computed_value": "12.90322580645161290322580645161290322581",
+      "formula": "4 / (4 + 17 + 10) * 100",
+      "answer": "C"
+    },
+    "q16": {
+      "kind": "break_even",
+      "computed_value": "916.6666666666666666666666666666666666667",
+      "formula": "22000.00 / (198.00 - 174.00); nearest unit as requested",
+      "answer": "B"
+    },
+    "q17": {
+      "kind": "settlement_date",
+      "computed_value": "2027-06-23",
+      "formula": "2026-12-12 + 193 calendar days",
+      "answer": "B"
+    },
+    "q18": {
+      "kind": "settlement_date",
+      "computed_value": "2027-05-09",
+      "formula": "2026-10-10 + 211 calendar days",
+      "answer": "D"
+    },
+    "q19": {
+      "kind": "ratio_allocation",
+      "computed_value": "383.3333333333333333333333333333333333333",
+      "formula": "690.00 * 5 / (5 + 4)",
+      "answer": "D"
+    },
+    "q20": {
+      "kind": "discount",
+      "computed_value": "165.5995",
+      "formula": "301.09 * (1 - 45/100)",
+      "answer": "C"
+    },
+    "q21": {
+      "kind": "discount",
+      "computed_value": "190.421",
+      "formula": "272.03 * (1 - 30/100)",
+      "answer": "D"
+    },
+    "q22": {
+      "kind": "settlement_date",
+      "computed_value": "2026-06-05",
+      "formula": "2026-04-12 + 54 calendar days",
+      "answer": "D"
+    },
+    "q23": {
+      "kind": "break_even",
+      "computed_value": "193.8775510204081632653061224489795918367",
+      "formula": "19000.00 / (124.00 - 26.00); nearest unit as requested",
+      "answer": "C"
+    },
+    "q24": {
+      "kind": "compound_interest",
+      "computed_value": "9849.7029585937500000",
+      "formula": "7000.00 * (1 + 5/100) ** 7",
+      "answer": "B"
+    },
+    "q25": {
+      "kind": "currency_conversion",
+      "computed_value": "3930.574145",
+      "formula": "4109.33 * 0.9565",
+      "answer": "B"
+    }
+  }
+}
