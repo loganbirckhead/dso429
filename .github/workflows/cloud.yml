@@ -1,0 +1,63 @@
+name: Cloud quiz worker
+run-name: Cloud quiz worker (from ${{ inputs.predecessor || 'manual' }})
+
+on:
+  workflow_dispatch:
+    inputs:
+      session_minutes:
+        description: 'Session length (1–300 minutes); successors use 300'
+        default: '300'
+        type: string
+      interval_seconds:
+        description: 'Check interval (30–900 seconds); successors use 300'
+        default: '300'
+        type: string
+      predecessor:
+        description: 'Previous run ID, for tracing handoffs'
+        default: 'manual'
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+# One running worker plus at most one pending successor. The one-shot fallback
+# uses a different group, and publication retries handle simultaneous submissions.
+concurrency:
+  group: quiz-cloud-worker
+  cancel-in-progress: false
+
+jobs:
+  worker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Regression tests and 1200 practice answers
+        id: tests
+        run: python -m unittest discover -s tests -v
+      - name: Check and submit every five minutes
+        id: worker
+        env:
+          SESSION_MINUTES: ${{ inputs.session_minutes }}
+          INTERVAL_SECONDS: ${{ inputs.interval_seconds }}
+        run: python cloud_worker.py run --session-minutes "$SESSION_MINUTES" --interval-seconds "$INTERVAL_SECONDS"
+      - name: Start or retain the next cloud worker
+        if: always() && !cancelled() && steps.tests.outcome == 'success' && steps.worker.outcome != 'skipped'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python cloud_worker.py ensure
+      - name: Retain final check diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloud-check-${{ github.run_id }}
+          path: reports/cloud-latest.json
+          if-no-files-found: ignore
+          retention-days: 7
