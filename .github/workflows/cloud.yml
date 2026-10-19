@@ -16,6 +16,10 @@ on:
         description: 'Previous run ID, for tracing handoffs'
         default: 'manual'
         type: string
+      exercise_recovery:
+        description: 'Deliberately fail after the live checks to test the fallback'
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -31,6 +35,8 @@ jobs:
   worker:
     runs-on: ubuntu-latest
     timeout-minutes: 340
+    outputs:
+      tests_outcome: ${{ steps.tests.outcome }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -48,6 +54,11 @@ jobs:
           SESSION_MINUTES: ${{ inputs.session_minutes }}
           INTERVAL_SECONDS: ${{ inputs.interval_seconds }}
         run: python cloud_worker.py run --session-minutes "$SESSION_MINUTES" --interval-seconds "$INTERVAL_SECONDS"
+      - name: Exercise recovery when explicitly requested
+        if: inputs.exercise_recovery
+        run: |
+          echo 'Intentional failure for the controlled cloud recovery test.'
+          exit 1
       - name: Start or retain the next cloud worker
         if: always() && !cancelled() && steps.tests.outcome == 'success' && steps.worker.outcome != 'skipped'
         env:
@@ -61,3 +72,16 @@ jobs:
           path: reports/cloud-latest.json
           if-no-files-found: ignore
           retention-days: 7
+
+  recover-with-original-workflow:
+    needs: worker
+    if: failure() && needs.worker.outputs.tests_outcome == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - name: Invoke the independent original solver and cloud watchdog
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run quiz.yml --repo "$GITHUB_REPOSITORY" --ref main

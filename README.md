@@ -12,8 +12,9 @@ Only one cloud worker executes at a time, with at most one pending replacement.
 No personal token or third-party hosting account is stored in the workflow.
 
 The original `Hourly quiz` workflow remains an independent one-shot solver and
-submitter, triggered by its existing schedule and whenever a cloud worker completes,
-fails, times out, or is canceled. After each run it checks whether the cloud chain is running
+submitter, triggered by its existing schedule. A separate recovery job also explicitly
+dispatches it after a failed cloud session whose regression tests passed. After each
+fallback run it checks whether the cloud chain is running
 or queued and restarts it if needed, even when its own solver run failed. The
 existing Mac backup remains available whenever the Mac is awake and online.
 Scheduled GitHub runs can still be delayed, so recovery from a terminated cloud
@@ -30,8 +31,9 @@ plus the live Actions log confirms activity; a stale timestamp needs investigati
 All execution and handoff paths stop at October 23, 2026, 10:00 UTC
 (3:00 AM Pacific). The default five-hour session stays below GitHub's six-hour
 job limit. Check failures are retried at the next poll and still make that session
-fail visibly; a failed session also attempts handoff. Manually canceled sessions
-do not hand off themselves, but the fallback completion trigger can restart them.
+fail visibly; a failed session also attempts handoff and invokes the original fallback.
+An abrupt whole-run termination or manual cancellation can prevent those recovery
+jobs from running; the independent schedule can restart the chain on its next run.
 To stop all cloud execution early, disable both `cloud.yml` and
 `quiz.yml`, then cancel any running/pending cloud worker.
 
@@ -50,6 +52,11 @@ prevention, watchdog recovery, transient-check recovery, and cutoff enforcement.
 Practice answer accuracy is checked against the 1,200 official practice keys;
 graded-round replay only checks solver coverage and consistency, not correctness
 against unpublished grading keys.
+
+To exercise the failure recovery job, also pass `-f exercise_recovery=true` with
+the short rehearsal. It deliberately produces a failed cloud run after successful
+live checks, then invokes the original fallback; the normal successor does not
+inherit this test input. Failure emails from that controlled test are expected.
 
 ## How it works
 
