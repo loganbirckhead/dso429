@@ -15,6 +15,12 @@ on:
   schedule:
     - cron: '7,22,37,52 * 15-23 10 *'
   workflow_dispatch:
+  # Recover after a worker ends, including a crash or timeout, without waiting
+  # for the next best-effort cron event. Normal handoffs already have a successor.
+  workflow_run:
+    workflows: ['Cloud quiz worker']
+    branches: [main]
+    types: [completed]
 
 permissions:
   contents: write

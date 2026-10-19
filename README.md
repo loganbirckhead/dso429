@@ -11,8 +11,9 @@ worker using the repository's temporary `GITHUB_TOKEN`. The Mac can be off.
 Only one cloud worker executes at a time, with at most one pending replacement.
 No personal token or third-party hosting account is stored in the workflow.
 
-The original `Hourly quiz` scheduled workflow remains an independent one-shot
-solver and submitter. After each run it checks whether the cloud chain is running
+The original `Hourly quiz` workflow remains an independent one-shot solver and
+submitter, triggered by its existing schedule and whenever a cloud worker completes,
+fails, times out, or is canceled. After each run it checks whether the cloud chain is running
 or queued and restarts it if needed, even when its own solver run failed. The
 existing Mac backup remains available whenever the Mac is awake and online.
 Scheduled GitHub runs can still be delayed, so recovery from a terminated cloud
@@ -30,7 +31,8 @@ All execution and handoff paths stop at October 23, 2026, 10:00 UTC
 (3:00 AM Pacific). The default five-hour session stays below GitHub's six-hour
 job limit. Check failures are retried at the next poll and still make that session
 fail visibly; a failed session also attempts handoff. Manually canceled sessions
-do not hand off. To stop all cloud execution early, disable both `cloud.yml` and
+do not hand off themselves, but the fallback completion trigger can restart them.
+To stop all cloud execution early, disable both `cloud.yml` and
 `quiz.yml`, then cancel any running/pending cloud worker.
 
 Start or inspect cloud execution:
