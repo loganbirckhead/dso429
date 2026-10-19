@@ -3,9 +3,55 @@
 An automatic arithmetic solver and GitHub submission pipeline for Logan Birckhead.
 Python 3.12+, standard library only. No API key or paid model calls are needed.
 
+## Cloud execution and fallbacks
+
+`Cloud quiz worker` runs on GitHub-hosted Ubuntu and checks the official feed every
+five minutes for up to five hours. At the end of each session it requests a new
+worker using the repository's temporary `GITHUB_TOKEN`. The Mac can be off.
+Only one cloud worker executes at a time, with at most one pending replacement.
+No personal token or third-party hosting account is stored in the workflow.
+
+The original `Hourly quiz` scheduled workflow remains an independent one-shot
+solver and submitter. After each run it checks whether the cloud chain is running
+or queued and restarts it if needed, even when its own solver run failed. The
+existing Mac backup remains available whenever the Mac is awake and online.
+Scheduled GitHub runs can still be delayed, so recovery from a terminated cloud
+chain is best effort. An outage affecting all GitHub runners can affect both
+cloud paths. The Mac backup supplies another execution environment when available.
+
+Each cloud check builds on the latest remote branch in a temporary worktree,
+preserves existing answer files, and retries from the updated remote if another
+runner pushes first. Successful publication is checked against GitHub's remote
+answer and audit contents. `cloud-status/latest.json` records the most recent
+published check, any solver errors, and the worker's Actions URL. A recent timestamp
+plus the live Actions log confirms activity; a stale timestamp needs investigation.
+
+All execution and handoff paths stop at October 23, 2026, 10:00 UTC
+(3:00 AM Pacific). The default five-hour session stays below GitHub's six-hour
+job limit. Check failures are retried at the next poll and still make that session
+fail visibly; a failed session also attempts handoff. Manually canceled sessions
+do not hand off. To stop all cloud execution early, disable both `cloud.yml` and
+`quiz.yml`, then cancel any running/pending cloud worker.
+
+Start or inspect cloud execution:
+
+```sh
+gh workflow run cloud.yml --repo loganbirckhead/dso429
+gh run list --repo loganbirckhead/dso429 --workflow cloud.yml
+```
+
+For an accelerated handoff rehearsal, add `-f session_minutes=1 -f interval_seconds=30`
+to the dispatch command. Its successor uses the normal five-hour/five-minute
+settings. Regression tests include real Git push races against disposable local
+remotes, partial solver failures, exhausted push retries, duplicate-worker
+prevention, watchdog recovery, transient-check recovery, and cutoff enforcement.
+Practice answer accuracy is checked against the 1,200 official practice keys;
+graded-round replay only checks solver coverage and consistency, not correctness
+against unpublished grading keys.
+
 ## How it works
 
-1. GitHub Actions checks the official `questions.csv` at minutes 7, 22, 37, and 52 each hour.
+1. The cloud worker checks the official `questions.csv` every five minutes. The independent scheduled fallback requests checks at minutes 7, 22, 37, and 52 each hour.
 2. Each available round without an existing valid answer file is solved independently.
 3. The solver computes each result with explicit formulas (Decimal arithmetic and calendar dates).
 4. A choice is accepted only if exactly one option matches the result at its displayed precision.

@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/quiz.yml'
+      - '.github/workflows/cloud.yml'
+      - 'cloud_worker.py'
       - 'quizbot.py'
       - 'solver.py'
       - 'tests/**'
@@ -80,6 +82,7 @@ jobs:
             git commit -m 'Submit available quiz rounds'
             pushed=false
             for attempt in 1 2 3; do
+              printf 'Publish attempt %s/3\n' "$attempt"
               git pull --rebase origin main
               if git push origin HEAD:main; then
                 pushed=true
@@ -106,3 +109,25 @@ jobs:
         run: |
           echo 'Some rounds need attention. See the solver output and diagnostic report.'
           exit 1
+
+  restart-cloud-if-needed:
+    # The original one-shot solver remains independent of the long-running worker.
+    # A failure in either must not prevent the scheduled recovery check.
+    needs: solve-and-submit
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain a live cloud worker or restart a stopped chain
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python cloud_worker.py ensure
