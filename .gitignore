@@ -8,3 +8,4 @@ reports/
 usage_reports/
 *.transcript.jsonl
 *.json.tmp
+.local-backup/
